@@ -468,6 +468,15 @@ class PremAccntNotification:
 			control.setSetting('%s.notification.range' % debrid_provider, '')
 			return False
 
+class ImdbRatingsUpdate:
+	def run(self):
+		from resources.lib.database import imdbratings
+		while not control.monitor.abortRequested():
+			if imdbratings.needs_refresh():
+				control.log('[ plugin.video.umbrella ]  IMDb Ratings Update Starting...', LOGINFO)
+				if imdbratings.refresh(): control.log('[ plugin.video.umbrella ]  IMDb Ratings Update Finished', LOGINFO)
+			if control.monitor.waitForAbort(86400): break
+
 def main():
 	while not control.monitor.abortRequested():
 		control.log('[ plugin.video.umbrella ]  Service Started', LOGINFO)
@@ -477,6 +486,7 @@ def main():
 		SyncMyAccounts().run()
 		PremAccntNotification().run()
 		ReuseLanguageInvokerCheck().run()
+		Thread(target=ImdbRatingsUpdate().run, daemon=True).start()
 		#SyncMovieLibrary().run()
 		#control.checkPlayNextEpisodes()
 		if control.setting('library.service.update') == 'true':

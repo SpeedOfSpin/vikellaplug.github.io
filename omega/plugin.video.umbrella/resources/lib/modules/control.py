@@ -96,6 +96,7 @@ punchplaySyncFile = joinPath(dataPath, 'punchplaySync.db')
 subsFile = joinPath(dataPath, 'substitute.db')
 fanarttvCacheFile = joinPath(dataPath, 'fanarttv.db')
 metaInternalCacheFile = joinPath(dataPath, 'video_cache.db')
+imdbRatingsFile = joinPath(dataPath, 'imdbratings.db')
 favouritesFile = joinPath(dataPath, 'favourites.db')
 plexSharesFile = joinPath(dataPath, 'plexshares.db')
 trailer = 'plugin://plugin.video.youtube/play/?video_id=%s'

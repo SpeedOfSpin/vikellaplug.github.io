@@ -3653,6 +3653,8 @@ class Movies:
 		if self.tmdbv4Credentials:
 			from resources.lib.modules import tmdb4 as _tmdb4
 			tmdb_v4_watchlist_ids = _tmdb4.get_watchlist_ids('movie')
+		from resources.lib.database import imdbratings
+		imdbRatings = imdbratings.get_ratings([i.get('imdb') for i in items])
 		for i in items:
 			try:
 				imdb, tmdb, title, year = i.get('imdb', ''), i.get('tmdb', ''), i['title'], i.get('year', '')
@@ -3662,8 +3664,10 @@ class Movies:
 					label = '%s (%s)' % (title, year)
 				else:
 					label = '%s' % title
-				try: labelProgress = label + '[COLOR %s]  [%s][/COLOR]' % (self.highlight_color, str(round(float(i['progress']), 1)) + '%')
-				except: labelProgress = label
+				labelProgress = label
+				if imdb in imdbRatings: labelProgress += ' [COLOR %s][%s][/COLOR]' % (self.highlight_color, imdbRatings[imdb])
+				try: labelProgress += '[COLOR %s]  [%s][/COLOR]' % (self.highlight_color, str(round(float(i['progress']), 1)) + '%')
+				except: pass
 				if i.get('punchplay_date'):
 					labelProgress += ' [%s - %s]' % (i['punchplay_date'], i.get('punchplay_release', 'Release'))
 				try:
