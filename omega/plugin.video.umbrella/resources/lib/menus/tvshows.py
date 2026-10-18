@@ -3749,11 +3749,14 @@ class TVshows:
 		if self.tmdbv4Credentials:
 			from resources.lib.modules import tmdb4 as _tmdb4
 			tmdb_v4_watchlist_ids = _tmdb4.get_watchlist_ids('tv')
+		from resources.lib.database import imdbratings
+		imdbRatings = imdbratings.get_ratings([i.get('imdb') for i in items])
 		for i in items:
 			try:
 				imdb, tmdb, tvdb, year, trailer = i.get('imdb', ''), i.get('tmdb', ''), i.get('tvdb', ''), i.get('year', ''), i.get('trailer', '')
 				title = label = i.get('tvshowtitle') or i.get('title')
 				if self.tvshows_show_year and year: label = '%s (%s)' % (label, year)
+				if imdb in imdbRatings: label += ' [COLOR %s][%s][/COLOR]' % (self.highlight_color, imdbRatings[imdb])
 				systitle = quote_plus(title)
 				if isProgress:
 					pass
